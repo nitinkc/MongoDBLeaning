@@ -4,7 +4,7 @@ A structured, incremental learning path to master MongoDB with hands-on labs, co
 
 ## 🎯 Learning Path
 
-1. **Theory** → Read the [MkDocs documentation](docs/) for each topic
+1. **Theory** → Read the [MkDocs documentation](https://nitinkc.github.io/MongoDBLeaning/) for each topic
 2. **Labs** → Run the MongoDB shell lab exercises in `labs/`
 3. **Interview Prep** → Review the Q&A in `docs/interview-prep.md`
 
