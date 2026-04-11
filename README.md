@@ -92,19 +92,24 @@ mkdocs serve
 
 Documentation is automatically deployed to GitHub Pages on every commit to `main` or `master` branch via GitHub Actions.
 
-**To enable GitHub Pages deployment:**
+### Setup GitHub Pages
 
-1. Go to your GitHub repository settings
-2. Navigate to **Settings** → **Pages**
+**Important: You must enable GitHub Pages for your repository first!**
+
+1. Go to your GitHub repository
+2. Navigate to **Settings** → **Pages** (in the left sidebar)
 3. Under "Build and deployment":
    - Set **Source** to "GitHub Actions"
-   - The workflow will automatically build and deploy your docs
+   - Click "Save"
+4. Wait for the first deployment to complete (check the **Actions** tab)
+5. Once deployed, your docs will be available at: `https://<your-username>.github.io/<repo-name>/`
 
-The documentation will be available at: `https://<your-username>.github.io/<repo-name>/`
+### Workflow Details
 
-**Workflow details** (`.github/workflows/deploy.yml`):
+The deployment workflow (`.github/workflows/deploy.yml`):
 - ✅ Triggers on push to `main`/`master` and pull requests
 - ✅ Sets up Python 3.11 with dependency caching
+- ✅ Installs dependencies from `requirements.txt`
 - ✅ Builds MkDocs static site
 - ✅ Deploys to GitHub Pages automatically
 
