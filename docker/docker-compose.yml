@@ -1,0 +1,104 @@
+services:
+  mongo1:
+    image: mongo:7.0
+    container_name: mongo1
+    hostname: mongo1
+    ports:
+      - "27017:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    volumes:
+      - mongo_data1:/data/db
+      - ../labs:/labs:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--port", "27017", "--eval", "db.adminCommand('ping').ok", "--quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  mongo2:
+    image: mongo:7.0
+    container_name: mongo2
+    hostname: mongo2
+    ports:
+      - "27018:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    volumes:
+      - mongo_data2:/data/db
+      - ../labs:/labs:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--port", "27017", "--eval", "db.adminCommand('ping').ok", "--quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  mongo3:
+    image: mongo:7.0
+    container_name: mongo3
+    hostname: mongo3
+    ports:
+      - "27019:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    volumes:
+      - mongo_data3:/data/db
+      - ../labs:/labs:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--port", "27017", "--eval", "db.adminCommand('ping').ok", "--quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  # Replica set initiator — runs once, sets up rs0, then seeds initial data
+  mongo-init:
+    image: mongo:7.0
+    container_name: mongo-init
+    depends_on:
+      mongo1:
+        condition: service_healthy
+      mongo2:
+        condition: service_healthy
+      mongo3:
+        condition: service_healthy
+    volumes:
+      - ./init.js:/init/init.js:ro
+    entrypoint: >
+      /bin/bash -c "
+        echo 'Initiating replica set...' &&
+        mongosh --host mongo1:27017 --eval \"
+          rs.initiate({
+            _id: 'rs0',
+            members: [
+              { _id: 0, host: 'mongo1:27017', priority: 2 },
+              { _id: 1, host: 'mongo2:27017', priority: 1 },
+              { _id: 2, host: 'mongo3:27017', priority: 1 }
+            ]
+          })
+        \" &&
+        echo 'Waiting for primary election...' &&
+        sleep 10 &&
+        echo 'Running init script...' &&
+        mongosh --host mongo1:27017 /init/init.js &&
+        echo 'Initialization complete!'
+      "
+    restart: "on-failure"
+
+  # Mongo Express — web-based MongoDB admin UI
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo1
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_URL: "mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaSet=rs0"
+      ME_CONFIG_BASICAUTH: "false"
+    depends_on:
+      mongo-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  mongo_data1:
+  mongo_data2:
+  mongo_data3:
+

@@ -1,0 +1,30 @@
+site_name: MongoDB Learning Labs
+site_description: MongoDB shell labs and comprehensive learning path with Docker
+theme:
+  name: journal
+nav:
+  - Home: index.md
+  - Theory:
+      - NoSQL & MongoDB: theory/01-nosql-and-mongodb.md
+      - Core Concepts: theory/02-core-concepts.md
+      - Data Modeling: theory/03-data-modeling.md
+      - Indexes & Aggregation: theory/04-indexes-and-aggregation.md
+      - Transactions & Consistency: theory/05-transactions-and-consistency.md
+      - TTL & Change Streams: theory/06-ttl-and-change-streams.md
+      - Advanced Aggregation: theory/07-aggregation-advanced.md
+      - Advanced Topics: theory/08-advanced.md
+  - Labs Overview: labs-overview.md
+  - Interview Prep: interview-prep.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
+plugins:
+  - search
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10.9.0/dist/mermaid.min.js
+  - js/mermaid-init.js
+
