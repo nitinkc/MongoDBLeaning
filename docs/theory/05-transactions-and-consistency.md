@@ -359,23 +359,27 @@ db.accounts.updateOne(
 ## Summary
 
 **ACID Transactions:**
+
 - **Atomicity:** All-or-nothing — no partial updates
 - **Consistency:** Rules and constraints enforced
 - **Isolation:** Concurrent transactions don't interfere
 - **Durability:** Committed data persists through crashes
 
 **when to use transactions:**
+
 - Multi-document updates that must succeed together
 - Financial operations (transfers, payments)
 - Inventory management (deduct stock + create order in one transaction)
 - Complex workflows needing rollback capability
 
 **Read/Write Concern:**
+
 - Read: local (fast), majority (safe), linearizable (strictest)
 - Write: w: 1 (fast), w: "majority" (safe), j: true (durable)
 - Choose based on your consistency vs. performance needs
 
 **Best Practices:**
+
 - Keep transactions short (reduces lock contention)
 - Use sessions properly — always endSession()
 - Implement retry logic for transient errors

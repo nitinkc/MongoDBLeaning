@@ -543,23 +543,27 @@ db.orders.aggregate([
 ## Summary
 
 **Advanced Stages:**
+
 - `$facet`: Multiple aggregations in parallel
 - `$bucket/$bucketAuto`: Group into ranges
 - `$redact`: Conditional field inclusion
 - `$out/$merge`: Write results to collections
 
 **Advanced Expressions:**
+
 - Conditional: `$cond`, `$switch`
 - Arrays: `$arrayElemAt`, `$slice`, `$map`, `$filter`, `$size`
 - Strings: `$concat`, `$substr`, `$split`, `$regexMatch`
 - Math: `$round`, `$abs`, `$mod`, `$divide`
 
 **Window Functions:**
+
 - `$setWindowFields` for running totals, moving averages, ranking
 - Partition windows by field or across entire collection
 - Range-based windows: `["unbounded", "current"]` or `[-7, 0]`
 
 **Best Practices:**
+
 - Use `$facet` to avoid multiple passes over data
 - Move `$match` early to reduce documents processed
 - Use `$out` for pre-computed reports

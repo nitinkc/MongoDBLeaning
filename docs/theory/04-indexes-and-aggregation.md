@@ -447,6 +447,7 @@ db.orders.aggregate([
 ## Summary
 
 **Indexes:**
+
 - Use single-field indexes for frequent equality/range queries
 - Use compound indexes with ESR rule: Equality, Sort, Range
 - Unique indexes prevent duplicates; sparse indexes skip null/missing values
@@ -454,6 +455,7 @@ db.orders.aggregate([
 - Always explain() queries to verify index usage
 
 **Aggregation:**
+
 - Pipeline stages transform data: $match → $group → $sort → $project
 - Group with accumulators ($sum, $avg, $min, $max, $push)
 - $lookup for joins, $unwind to expand arrays

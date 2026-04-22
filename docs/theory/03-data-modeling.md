@@ -9,6 +9,7 @@ The fundamental decision in MongoDB modeling: should related data live inside a 
 ### EMBEDDING (Denormalization)
 
 **When to embed:**
+
 - Data is always accessed together (belongs with parent)
 - One-to-few relationships (typically < 20 sub-documents)
 - Sub-documents don't grow unboundedly
@@ -62,12 +63,14 @@ db.users_embedded.updateOne(
 ```
 
 **Advantages:**
+
 - Fewer round trips to DB — fetch parent + children in one query
 - Atomic writes — update parent and children together
 - No joins — simpler queries & better performance
 - Self-contained document — easier to replicate/backup
 
 **Disadvantages:**
+
 - Unbounded growth — if children grow without limit, document size explodes
 - Document size limit — MongoDB documents max out at 16MB
 - Duplication — if data is accessed independently, you duplicate it
@@ -78,6 +81,7 @@ db.users_embedded.updateOne(
 ### REFERENCING (Normalization)
 
 **When to reference:**
+
 - Data grows unboundedly (all orders ever, not just recent)
 - Data is shared across documents (one address for multiple users)
 - Child documents are frequently queried independently
@@ -141,12 +145,14 @@ let userAddresses = db.addresses.find({
 ```
 
 **Advantages:**
+
 - No size limit — children can grow indefinitely
 - No duplication — child data exists once, referenced many times
 - Independent queries — efficiently query orders without fetching users
 - Flexible updates — change an order without touching user document
 
 **Disadvantages:**
+
 - Multiple queries or joins — need $lookup (slower than embedding)
 - Referential integrity — no foreign key constraint, manual consistency
 - Application logic — must manage references in code
@@ -342,17 +348,17 @@ if (docSize > 15000000) {
 
 ## Choosing Embedding vs. Referencing: Decision Matrix
 
-| Factor | Embed | Reference |
-|--------|-------|-----------|
-| **Data grows unboundedly** | ❌ | ✅ |
-| **Data accessed together** | ✅ | ❌ |
-| **Data shared across docs** | ❌ | ✅ |
-| **One-to-few relationship** | ✅ | ❌ |
-| **One-to-many to many relationship** | ❌ | ✅ |
-| **Frequent child-only queries** | ❌ | ✅ |
-| **Write performance critical** | ✅ | ❌ |
-| **Read performance critical** (simple) | ✅ | ❌ |
-| **Read performance critical** (complex) | ❌ | ✅ |
+| Factor                                  | Embed  | Reference  |
+|:----------------------------------------|:-------|:-----------|
+| **Data grows unboundedly**              | ❌      | ✅          |
+| **Data accessed together**              | ✅      | ❌          |
+| **Data shared across docs**             | ❌      | ✅          |
+| **One-to-few relationship**             | ✅      | ❌          |
+| **One-to-many to many relationship**    | ❌      | ✅          |
+| **Frequent child-only queries**         | ❌      | ✅          |
+| **Write performance critical**          | ✅      | ❌          |
+| **Read performance critical** (simple)  | ✅      | ❌          |
+| **Read performance critical** (complex) | ❌      | ✅          |
 
 ---
 

@@ -8,6 +8,7 @@ MongoDB is a document-oriented NoSQL database built for flexible schemas, horizo
 **Definition**: NoSQL (Not Only SQL) databases are non-relational data stores designed for distributed, high-volume workloads with flexible or schema-less data models.
 
 **What it means**:
+
 - No fixed schema — add fields without migrations
 - Horizontal scaling — add more servers, not bigger ones
 - Designed for high availability with replication built-in
@@ -16,18 +17,19 @@ MongoDB is a document-oriented NoSQL database built for flexible schemas, horizo
 
 ### Types of NoSQL Databases
 
-| Type | Examples | Best For |
-|------|----------|----------|
-| **Document** | MongoDB, Couchbase | Flexible JSON-like records, content, catalogs |
-| **Key-Value** | Redis, DynamoDB | Sessions, caching, simple lookups |
-| **Column-Family** | Cassandra, HBase | Time-series, IoT, wide-row analytics |
-| **Graph** | Neo4j, Amazon Neptune | Relationships, social networks, fraud detection |
-| **Search** | Elasticsearch, Solr | Full-text search, log analytics |
+| Type              | Examples              | Best For                                        |
+|:------------------|:----------------------|:------------------------------------------------|
+| **Document**      | MongoDB, Couchbase    | Flexible JSON-like records, content, catalogs   |
+| **Key-Value**     | Redis, DynamoDB       | Sessions, caching, simple lookups               |
+| **Column-Family** | Cassandra, HBase      | Time-series, IoT, wide-row analytics            |
+| **Graph**         | Neo4j, Amazon Neptune | Relationships, social networks, fraud detection |
+| **Search**        | Elasticsearch, Solr   | Full-text search, log analytics                 |
 
 ### MongoDB: Document Database
 **Definition**: MongoDB stores data as BSON (Binary JSON) documents in collections, rather than rows in tables.
 
 **What it means**:
+
 - **Document** ≈ a JSON object (like a row in a table, but flexible)
 - **Collection** ≈ a table (but no enforced schema)
 - **Database** ≈ a schema/namespace grouping collections
@@ -38,16 +40,16 @@ MongoDB is a document-oriented NoSQL database built for flexible schemas, horizo
 
 ## MongoDB vs Relational Database
 
-| Aspect | Relational (PostgreSQL) | MongoDB |
-|--------|------------------------|---------|
-| **Data unit** | Row in a table | BSON document |
-| **Schema** | Fixed (DDL required) | Flexible (optional validation) |
-| **Joins** | `JOIN` across tables | Embed or `$lookup` (use sparingly) |
-| **Transactions** | Full ACID always | ACID (4.0+ replica set, 4.2+ sharded) |
-| **Scaling** | Vertical (bigger server) | Horizontal (sharding) |
-| **Query Language** | SQL | MQL (MongoDB Query Language) |
-| **Aggregation** | GROUP BY, window functions | Aggregation Pipeline |
-| **Schema changes** | `ALTER TABLE` (expensive) | Add field on next write (free) |
+| Aspect             | Relational (PostgreSQL)    | MongoDB                               |
+|:-------------------|:---------------------------|:--------------------------------------|
+| **Data unit**      | Row in a table             | BSON document                         |
+| **Schema**         | Fixed (DDL required)       | Flexible (optional validation)        |
+| **Joins**          | `JOIN` across tables       | Embed or `$lookup` (use sparingly)    |
+| **Transactions**   | Full ACID always           | ACID (4.0+ replica set, 4.2+ sharded) |
+| **Scaling**        | Vertical (bigger server)   | Horizontal (sharding)                 |
+| **Query Language** | SQL                        | MQL (MongoDB Query Language)          |
+| **Aggregation**    | GROUP BY, window functions | Aggregation Pipeline                  |
+| **Schema changes** | `ALTER TABLE` (expensive)  | Add field on next write (free)        |
 
 ### Key Differences in Practice
 
@@ -110,12 +112,14 @@ The system keeps running despite network partitions between nodes.
 
 ### MongoDB's Position
 MongoDB is **CP** by default:
+
 - Writes go to the **primary** (single source of truth)
 - Reads from primary are always consistent
 - If the primary fails, a brief write outage occurs during election (~10s)
 - Reads from secondaries (with `readPreference: secondary`) can be stale → behaves like AP
 
 Tunable via readConcern / writeConcern:
+
 - `writeConcern: w:majority` + `readConcern: majority` = strong consistency
 - `readPreference: secondary` + `readConcern: local` = higher availability, possible stale reads
 

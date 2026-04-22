@@ -188,14 +188,14 @@ db.logs.find().sort({ $natural: -1 });  // Newest first (reverse)
 
 ### Capped vs. TTL
 
-| Feature | Capped Collection | TTL Index |
-|---------|-------------------|-----------|
-| **Removal Trigger** | Size limit reached | Time elapsed |
-| **Order** | FIFO (oldest first) | Time-based |
-| **Best For** | Fixed-size logs, activity feeds | Sessions, transient data, cache |
-| **Overhead** | Lower (simple deletion) | Higher (background check) |
-| **Flexibility** | Less (all docs same age) | More (selective based on time) |
-| **Practical Use** | System logs, event streams | Auth tokens, temporary data |
+| Feature             | Capped Collection               | TTL Index                       |
+|:--------------------|:--------------------------------|:--------------------------------|
+| **Removal Trigger** | Size limit reached              | Time elapsed                    |
+| **Order**           | FIFO (oldest first)             | Time-based                      |
+| **Best For**        | Fixed-size logs, activity feeds | Sessions, transient data, cache |
+| **Overhead**        | Lower (simple deletion)         | Higher (background check)       |
+| **Flexibility**     | Less (all docs same age)        | More (selective based on time)  |
+| **Practical Use**   | System logs, event streams      | Auth tokens, temporary data     |
 
 ---
 
@@ -382,17 +382,20 @@ changeStream.on("change", change => {
 ## Summary
 
 **TTL Indexes:**
+
 - Automatically delete documents after specified seconds
 - Perfect for sessions, temporary data, cache, logs
 - Background cleanup runs every 60 seconds
 - Simple and requires no application logic
 
 **Capped Collections:**
+
 - Fixed size, automatic FIFO deletion when full
 - Good for logs and event streams with predictable size
 - Simpler than TTL, but less flexible
 
 **Change Streams:**
+
 - Real-time listening to data changes
 - Watch collections or filtered changes
 - Resume from saved position using resume tokens
@@ -400,6 +403,7 @@ changeStream.on("change", change => {
 - Works with transactions — sees all changes together
 
 **Best Practices:**
+
 - Use TTL for time-based expiration
 - Use Change Streams for real-time applications
 - Store resume tokens for fault tolerance

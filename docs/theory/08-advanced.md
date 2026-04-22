@@ -381,22 +381,22 @@ Distribute data across multiple servers for massive scale.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│            Sharded MongoDB Cluster                        │
-├──────────────────────────────────────────────────────────┤
-│                                                           │
-│  Config Servers                Router (mongos)            │
+│            Sharded MongoDB Cluster                       │
+├─────────────────────────────────────────────────────────-┤
+│                                                          │
+│  Config Servers                Router (mongos)           │
 │  (Shard balance, metadata)     (Route queries)           │
-│         │                            │                    │
-│         └────────────┬───────────────┘                    │
-│                      │                                    │
-│       ┌──────────────┼──────────────┐                     │
-│       │              │              │                     │
-│    SHARD 1        SHARD 2        SHARD 3                  │
-│ (Keys A-H)     (Keys I-P)    (Keys Q-Z)                   │
-│                                                           │
+│         │                            │                   │
+│         └────────────┬───────────────┘                   │
+│                      │                                   │
+│       ┌──────────────┼──────────────┐                    │
+│       │              │              │                    │
+│    SHARD 1        SHARD 2        SHARD 3                 │
+│ (Keys A-H)     (Keys I-P)    (Keys Q-Z)                  │
+│                                                          │
 │ Each shard is a replica set                              │
 │ Data distributed by shard key                            │
-│                                                           │
+│                                                          │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -445,24 +445,28 @@ sh.shardCollection("myapp.orders", { status: 1 });  // ❌ Bad: few statuses, da
 ## Summary
 
 **Replica Sets:**
+
 - High availability via automatic failover
 - Replication lag: data eventually consistent across secondaries
 - Write concern controls how many replicas must ACK
 - Elections: secondaries elect new primary if primary fails
 
 **Security:**
+
 - Authentication: Username/password + role-based authorization
 - Network: TLS/SSL for encryption in transit
 - Field encryption: Automatic client-side encryption for sensitive data
 - Audit: Monitor access with profiling and audit logs
 
 **Monitoring:**
+
 - `db.serverStatus()`: CPU, memory, connections, operations
 - `db.currentOp()`: Active operations
 - `explain()`: Query execution plan
 - `$indexStats`: Index usage metrics
 
 **Performance:**
+
 - Use explain() to verify index usage
 - Drop unused indexes
 - Create indexes for frequent queries (ESR rule)
@@ -470,6 +474,7 @@ sh.shardCollection("myapp.orders", { status: 1 });  // ❌ Bad: few statuses, da
 - Schema validation to prevent invalid data
 
 **Sharding:**
+
 - Horizontal scaling by distributing data across shards
 - Shard key determines data distribution
 - Good shard key: high cardinality, even distribution, commonly queried
