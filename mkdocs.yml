@@ -1,7 +1,30 @@
 site_name: MongoDB Learning Labs
 site_description: MongoDB shell labs and comprehensive learning path with Docker
 theme:
-  name: journal
+  name: material
+  palette:
+    # Light mode with orange accents
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: orange
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    # Dark mode with orange accents
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: orange
+      accent: deep orange
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.sections
+#    - toc.integrate
+    - header.autohide
 nav:
   - Home: index.md
   - Theory:

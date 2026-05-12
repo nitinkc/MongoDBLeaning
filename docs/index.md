@@ -25,7 +25,7 @@ docker exec -it mongo1 mongosh --file /labs/01_database_basics.js
 ```bash
 docker exec -it mongo1 mongosh
 # or from host (requires mongosh installed):
-mongosh "mongodb://localhost:27017/mongo_labs?replicaSet=rs0"
+mongosh "mongodb://127.0.0.1:27017/mongo_labs?directConnection=true"
 ```
 
 ### 4. View These Docs Locally

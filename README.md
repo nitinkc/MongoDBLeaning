@@ -1,122 +1,144 @@
 # MongoDB Learning Labs
 
-A structured, incremental learning path to master MongoDB with hands-on labs, comprehensive theory documentation, and a Docker-based environment.
+A practical MongoDB learning repo with:
 
-## 🎯 Learning Path
+- 11 `mongosh` labs in [`labs/`](labs/)
+- 11 Python/Jupyter notebooks in [`notebooks/`](notebooks/)
+- 8 theory modules in [`docs/theory/`](docs/theory/)
+- A local 3-node MongoDB replica set in `docker/`
 
-1. **Theory** → Read the [MkDocs documentation](https://nitinkc.github.io/MongoDBLeaning/) for each topic
-2. **Labs** → Run the MongoDB shell lab exercises in `labs/`
-3. **Interview Prep** → Review the Q&A in `docs/interview-prep.md`
+## Quick start
 
-## 🚀 Quick Start
-
-### Start the MongoDB Cluster
+### 1) Start MongoDB (Docker)
 
 ```bash
-cd docker && docker compose up -d
+cd docker
+./start.sh
 ```
 
-This starts:
-- **mongo1** (primary) on port `27017`
-- **mongo2** (secondary) on port `27018`
-- **mongo3** (secondary) on port `27019`
-- **mongo-express** UI on port `8081` → http://localhost:8081
-
-### Run Labs
+### 2) Verify setup
 
 ```bash
-# Run a specific lab
+cd docker
+./verify-setup.sh
+```
+
+### 3) Open first lab
+
+```bash
+cd notebooks
+jupyter notebook 01_database_basics.ipynb
+```
+
+Or run the shell lab:
+
+```bash
 docker exec -it mongo1 mongosh --file /labs/01_database_basics.js
-
-# Interactive MongoDB shell
-docker exec -it mongo1 mongosh
-
-# Or connect from host (requires mongosh installed locally)
-mongosh "mongodb://localhost:27017/mongo_labs?replicaSet=rs0"
 ```
 
-### View Documentation
+## Connection options
+
+### MongoDB Compass (local)
+
+```text
+mongodb://127.0.0.1:27017/mongo_labs?directConnection=true
+```
+
+Recommended Compass settings:
+
+- Authentication: None
+- TLS/SSL: Off
+- Direct connection: Enabled
+
+### Local `mongosh`
 
 ```bash
-# Setup Python virtual environment and install dependencies (one-time)
-chmod +x scripts/setup.sh
-./scripts/setup.sh
-
-# Activate the virtual environment (if not already active)
-source venv/bin/activate
-
-# Serve docs locally
-mkdocs serve
-
-# Open http://localhost:8000
+mongosh 'mongodb://127.0.0.1:27017/mongo_labs?directConnection=true'
 ```
 
-**Alternative (manual setup)**:
+### Docker `mongosh`
+
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-mkdocs serve
+docker exec -it mongo1 mongosh 'mongodb://localhost:27017/mongo_labs?replicaSet=rs0'
 ```
 
-## 📚 Theory Modules
+### Python (`pymongo`)
 
-| Module  | Topic                                                                        |
-|:--------|:-----------------------------------------------------------------------------|
-| 01      | [NoSQL & MongoDB](docs/theory/01-nosql-and-mongodb.md)                       |
-| 02      | [Core Concepts](docs/theory/02-core-concepts.md)                             |
-| 03      | [Data Modeling](docs/theory/03-data-modeling.md)                             |
-| 04      | [Indexes & Aggregation](docs/theory/04-indexes-and-aggregation.md)           |
-| 05      | [Transactions & Consistency](docs/theory/05-transactions-and-consistency.md) |
-| 06      | [TTL & Change Streams](docs/theory/06-ttl-and-change-streams.md)             |
-| 07      | [Advanced Aggregation](docs/theory/07-aggregation-advanced.md)               |
-| 08      | [Advanced Topics](docs/theory/08-advanced.md)                                |
+```python
+from pymongo import MongoClient
 
-## 🔬 Lab Exercises
+client = MongoClient('mongodb://127.0.0.1:27017/?directConnection=true')
+db = client['mongo_labs']
+```
 
-| Lab  | Description                                     |
-|:-----|:------------------------------------------------|
-| 01   | Database Basics - CRUD operations               |
-| 02   | Document Modeling - Embedding vs Referencing    |
-| 03   | Indexes - Types, creation, and query plans      |
-| 04   | Aggregation Pipeline - Core stages              |
-| 05   | Transactions - Multi-document ACID              |
-| 06   | TTL & Capped Collections                        |
-| 07   | Advanced Aggregation - $lookup, $facet          |
-| 08   | Schema Patterns - Bucket, polymorphic, computed |
-| 09   | Replica Set - Read preferences, write concerns  |
-| 10   | Security Basics - Users, roles, auth            |
-| 11   | Monitoring & Performance - Profiler, explain    |
+### Mongo Express UI
 
-## 📖 Documentation Deployment
+```text
+http://localhost:8081
+```
 
-Documentation is automatically deployed to GitHub Pages on every commit to `main` or `master` branch via GitHub Actions.
+## Learning path
 
-### Setup GitHub Pages
+| Level | Labs | Focus | Time |
+|---|---|---|---|
+| Beginner | 01-03 | CRUD, modeling, indexes | 2-3h |
+| Intermediate | 04-06 | Aggregation, transactions, TTL | 3-4h |
+| Advanced | 07-11 | Advanced aggregation, patterns, replica sets, security, monitoring | 4-5h |
 
-**Important: You must enable GitHub Pages for your repository first!**
+Total hands-on time: about 10 hours.
 
-1. Go to your GitHub repository
-2. Navigate to **Settings** → **Pages** (in the left sidebar)
-3. Under "Build and deployment":
-   - Set **Source** to "GitHub Actions"
-   - Click "Save"
-4. Wait for the first deployment to complete (check the **Actions** tab)
-5. Once deployed, your docs will be available at: `https://<your-username>.github.io/<repo-name>/`
+## What is pre-seeded
 
-### Workflow Details
+Database: `mongo_labs`
 
-The deployment workflow (`.github/workflows/deploy.yml`):
-- ✅ Triggers on push to `main`/`master` and pull requests
-- ✅ Sets up Python 3.11 with dependency caching
-- ✅ Installs dependencies from `requirements.txt`
-- ✅ Builds MkDocs static site
-- ✅ Deploys to GitHub Pages automatically
+- `users` (3)
+- `products` (3)
+- `orders` (3)
+- `events` (4)
+- `sessions` (TTL examples)
 
-## 🛠️ Requirements
+## Most-used commands
 
-- Docker Desktop
-- mongosh (optional, for local connection)
-- Python 3.x + pip (for MkDocs)
-- GitHub repository (for automatic deployment)
+```bash
+# start / verify
+cd docker
+./start.sh
+./verify-setup.sh
 
+# logs and status
+cd docker
+docker compose ps
+docker compose logs mongo-init
+docker exec mongo1 mongosh --eval "rs.status()"
+
+# stop (keep data)
+cd docker
+docker compose down
+
+# clean reset (delete data)
+cd docker
+docker compose down -v
+./start.sh --clean
+```
+
+## Troubleshooting
+
+- Port conflicts: run `docker compose down`, then `./start.sh`
+- Cannot connect: run `docker compose ps` and `./verify-setup.sh`
+- `mongo-init` issues: run `docker compose logs mongo-init`
+- Missing data after restart: `docker compose down -v` removes volumes
+
+## Repo map
+
+- [`labs/`](labs/) - `mongosh` labs
+- [`notebooks/`](notebooks/) - Python/Jupyter labs
+- [`docs/`](docs/) - theory and interview prep
+- [`docker/`](docker/) - replica set and startup scripts
+- [`scripts/`](scripts/) - helper scripts
+
+## Next step
+
+Start with:
+
+- [`notebooks/01_database_basics.ipynb`](notebooks/01_database_basics.ipynb) (guided)
+- or [`labs/01_database_basics.js`](labs/01_database_basics.js) (shell-first)

@@ -1,4 +1,4 @@
-// Lab 01: Database Basics
+ // Lab 01: Database Basics
 // Topics: use, createCollection, CRUD (insertOne/Many, findOne, find, updateOne, replaceOne, deleteOne)
 // Run: docker exec -it mongo1 mongosh --file /labs/01_database_basics.js
 

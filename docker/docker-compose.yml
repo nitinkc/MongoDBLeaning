@@ -60,25 +60,22 @@ services:
         condition: service_healthy
     volumes:
       - ./init.js:/init/init.js:ro
-    entrypoint: >
-      /bin/bash -c "
-        echo 'Initiating replica set...' &&
-        mongosh --host mongo1:27017 --eval \"
-          rs.initiate({
-            _id: 'rs0',
-            members: [
-              { _id: 0, host: 'mongo1:27017', priority: 2 },
-              { _id: 1, host: 'mongo2:27017', priority: 1 },
-              { _id: 2, host: 'mongo3:27017', priority: 1 }
-            ]
-          })
-        \" &&
-        echo 'Waiting for primary election...' &&
-        sleep 10 &&
-        echo 'Running init script...' &&
-        mongosh --host mongo1:27017 /init/init.js &&
-        echo 'Initialization complete!'
-      "
+    entrypoint:
+      - /bin/bash
+      - -lc
+      - |
+          set -e
+          echo 'Initiating replica set (idempotent)...'
+          mongosh --host mongo1:27017 --quiet --eval "rs.initiate({ _id: 'rs0', members: [ { _id: 0, host: 'mongo1:27017', priority: 2 }, { _id: 1, host: 'mongo2:27017', priority: 1 }, { _id: 2, host: 'mongo3:27017', priority: 1 } ] })" || true
+
+          echo 'Waiting for mongo1 to become writable primary...'
+          until [ "$(mongosh --host mongo1:27017 --quiet --eval 'db.hello().isWritablePrimary')" = "true" ]; do
+            sleep 2
+          done
+
+          echo 'Running init script...'
+          mongosh --host mongo1:27017 /init/init.js
+          echo 'Initialization complete!'
     restart: "on-failure"
 
   # Mongo Express — web-based MongoDB admin UI

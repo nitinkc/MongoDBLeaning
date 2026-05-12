@@ -1,5 +1,9 @@
 mkdocs<2.0
 mkdocs-material
 mkdocs-mermaid2-plugin
-mkdocs-bootswatch
+
+# Python/Jupyter lab support
+pymongo>=4.0
+jupyter>=1.0
+ipython>=8.0
 
