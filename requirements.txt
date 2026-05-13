@@ -1,7 +1,7 @@
 mkdocs<2.0
 mkdocs-material
-mkdocs-mermaid2-plugin
-
+mkdocs-jupyter>=0.24.0
+mkdocs-mermaid2-plugin>=0.6.0
 # Python/Jupyter lab support
 pymongo>=4.0
 jupyter>=1.0

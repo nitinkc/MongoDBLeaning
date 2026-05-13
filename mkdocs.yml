@@ -1,5 +1,6 @@
 site_name: MongoDB Learning Labs
 site_description: MongoDB shell labs and comprehensive learning path with Docker
+repo_url: https://github.com/nitinkc/MongoDBLeaning
 theme:
   name: material
   palette:
@@ -25,6 +26,20 @@ theme:
     - navigation.sections
 #    - toc.integrate
     - header.autohide
+
+markdown_extensions:
+  - admonition
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
+plugins:
+  - search
+  - mkdocs-jupyter
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10.9.0/dist/mermaid.min.js
+  - js/mermaid-init.js
+
 nav:
   - Home: index.md
   - Theory:
@@ -36,18 +51,19 @@ nav:
       - TTL & Change Streams: theory/06-ttl-and-change-streams.md
       - Advanced Aggregation: theory/07-aggregation-advanced.md
       - Advanced Topics: theory/08-advanced.md
-  - Labs Overview: labs-overview.md
+  - Labs:
+      - Overview: labs-overview.md
+      - Notebooks README: notebooks/README.md
+      - Connection Setup: notebooks/00_connection.ipynb
+      - Database Basics: notebooks/01_database_basics.ipynb
+      - Document Modeling: notebooks/02_document_modeling.ipynb
+      - Indexes: notebooks/03_indexes.ipynb
+      - Aggregation Pipeline: notebooks/04_aggregation_pipeline.ipynb
+      - Transactions: notebooks/05_transactions.ipynb
+      - TTL & Capped: notebooks/06_ttl_and_capped.ipynb
+      - Advanced Aggregation: notebooks/07_advanced_aggregation.ipynb
+      - Schema Patterns: notebooks/08_schema_patterns.ipynb
+      - Replica Set: notebooks/09_replica_set.ipynb
+      - Security Basics: notebooks/10_security_basics.ipynb
+      - Monitoring & Performance: notebooks/11_monitoring_and_performance.ipynb
   - Interview Prep: interview-prep.md
-
-markdown_extensions:
-  - admonition
-  - pymdownx.inlinehilite
-  - pymdownx.superfences
-  - pymdownx.details
-plugins:
-  - search
-
-extra_javascript:
-  - https://unpkg.com/mermaid@10.9.0/dist/mermaid.min.js
-  - js/mermaid-init.js
-

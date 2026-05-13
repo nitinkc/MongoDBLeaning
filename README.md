@@ -19,7 +19,6 @@ cd docker
 ### 2) Verify setup
 
 ```bash
-cd docker
 ./verify-setup.sh
 ```
 
@@ -36,7 +35,26 @@ Or run the shell lab:
 docker exec -it mongo1 mongosh --file /labs/01_database_basics.js
 ```
 
+### Start Documentation
+At the root directory, run:
+
+```shell
+python3 -m venv .venv
+source .venv/bin/activate
+
+pip install -r requirements.txt
+mkdocs serve --livereload
+```
+
+Then open `http://localhost:8000` in your browser to access the documentation.
+
 ## Connection options
+
+### Mongo Express UI
+
+```text
+http://localhost:8081
+```
 
 ### MongoDB Compass (local)
 
@@ -69,12 +87,6 @@ from pymongo import MongoClient
 
 client = MongoClient('mongodb://127.0.0.1:27017/?directConnection=true')
 db = client['mongo_labs']
-```
-
-### Mongo Express UI
-
-```text
-http://localhost:8081
 ```
 
 ## Learning path
@@ -128,17 +140,3 @@ docker compose down -v
 - `mongo-init` issues: run `docker compose logs mongo-init`
 - Missing data after restart: `docker compose down -v` removes volumes
 
-## Repo map
-
-- [`labs/`](labs/) - `mongosh` labs
-- [`notebooks/`](notebooks/) - Python/Jupyter labs
-- [`docs/`](docs/) - theory and interview prep
-- [`docker/`](docker/) - replica set and startup scripts
-- [`scripts/`](scripts/) - helper scripts
-
-## Next step
-
-Start with:
-
-- [`notebooks/01_database_basics.ipynb`](notebooks/01_database_basics.ipynb) (guided)
-- or [`labs/01_database_basics.js`](labs/01_database_basics.js) (shell-first)
